@@ -38,10 +38,23 @@
 <body>
   <a class="skip-link" href="#contenuto">Salta al contenuto</a>
   <div class="shell">
-    <header class="topbar">
-      <div class="brand"><div class="logo" aria-label="Logo Camino Pellegrino RPG"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 2l3 5 6 .9-4.3 4.1 1 5.9L12 15l-5.7 2.9 1-5.9L3 7.9 9 7z"/></svg></div><div><h1>Camino Pellegrino RPG</h1><p>La tua credencial digitale: costanza prima, distanza dopo.</p></div></div>
-      <div class="top-actions"><button type="button" class="chip" data-fill-demo>Carica demo</button><button type="button" class="primary" data-scroll-log>Registra allenamento</button></div>
-    </header>
+     <div class="top-actions">
+    <form id="authForm" class="auth-form" style="display:flex; gap:.5rem; align-items:center; flex-wrap:wrap;">
+      <input
+        id="authEmail"
+        type="email"
+        placeholder="email per magic link"
+        required
+        style="min-width:220px; padding:.55rem .8rem; border-radius:999px; border:1px solid rgba(226,182,91,.35); background:#0d1118; color:#f7f1de; font-size:.85rem;"
+      />
+      <button type="submit" class="chip">Invia link</button>
+    </form>
+    <div id="authStatus" style="display:none; align-items:center; gap:.5rem;">
+      <span id="authUserLabel" style="font-size:.8rem; color:#b6b09f;"></span>
+      <button type="button" class="chip" id="logoutBtn">Esci</button>
+    </div>
+    <button type="button" class="primary" data-scroll-log>Registra allenamento</button>
+  </div>
     <main id="contenuto">
       <section class="hero">
         <div class="panel"><div class="eyebrow">Camino Francés • Saint-Jean → Santiago</div><h2 class="title">Cammina ogni giorno.<br>Scrivi la tua Compostela.</h2><p class="subtitle">Questa versione premia l’abitudine: muoversi conta, anche poco. La mappa del Cammino è il viaggio epico; i timbri e l’XP arrivano soprattutto da costanza, impegno, progressione e rispetto del piano.</p><div class="stats" aria-label="Statistiche principali"><div class="stat"><small>Livello</small><strong id="levelValue">4</strong></div><div class="stat"><small>Streak</small><strong id="streakValue">5 giorni</strong></div><div class="stat"><small>Timbri</small><strong id="stampValue">6 / 16</strong></div><div class="stat"><small>Km Camino</small><strong id="caminoValue">61 / 780</strong></div></div></div>
@@ -63,26 +76,375 @@
       <p class="footer-note">Prototype concept: mappa del pellegrino fantasy-RPG, progressione motivazionale behavior-first, credencial con timbri, Compostela finale.</p>
     </main>
   </div>
-  <script>
-    const phasePlan = [{ phase: 'Fase 1 — Adattamento', start: '2026-04-22', end: '2026-05-31', objective: 'Costanza, dolore sotto controllo, base aerobica', weight: { presence: 0.45, consistency: 0.25, effort: 0.2, distance: 0.1 } }, { phase: 'Fase 2 — Costruzione', start: '2026-06-01', end: '2026-06-30', objective: 'Aumentare km, introdurre salite', weight: { presence: 0.35, consistency: 0.25, effort: 0.2, distance: 0.2 } }, { phase: 'Fase 3 — Specifica montagna', start: '2026-07-01', end: '2026-07-31', objective: 'Trekking, lunghi, doppi giorni', weight: { presence: 0.25, consistency: 0.2, effort: 0.25, distance: 0.3 } }, { phase: 'Fase 4 — Rifinitura', start: '2026-08-01', end: '2026-08-31', objective: 'Arrivare fresco, non stanco', weight: { presence: 0.35, consistency: 0.25, effort: 0.2, distance: 0.2 } }];
-    const csvQuests = [{ subject: 'Camminata 4 km', date: '2026-04-23', description: 'Facile + mobilità schiena' }, { subject: 'Forza + 3 km', date: '2026-04-24', description: 'Allenamento forza + camminata leggera' }, { subject: 'Camminata 6 km', date: '2026-04-25', description: 'Ritmo facile, pause regolari' }, { subject: 'Camminata 8 km', date: '2026-04-26', description: 'Lento e regolare' }, { subject: 'Camminata 10 km', date: '2026-04-27', description: 'Medio, ritmo facile' }, { subject: 'Riposo', date: '2026-04-28', description: 'Recupero totale' }, { subject: 'Forza + 3 km', date: '2026-04-29', description: 'Smonto: forza + camminata leggera' }, { subject: 'Lungo 12 km', date: '2026-04-30', description: 'Con pause e alimentazione' }, { subject: 'Camminata 4 km', date: '2026-05-01', description: 'Easy o forza' }, { subject: 'Camminata 5 km', date: '2026-05-02', description: 'Ritmo facile' }, { subject: 'Lungo 13 km', date: '2026-05-03', description: 'Progressivo' }, { subject: 'Lungo 14 km', date: '2026-05-04', description: 'Costante' }, { subject: 'Forza + 3 km', date: '2026-05-05', description: 'Mattina lavoro' }, { subject: 'Camminata 5 km', date: '2026-05-06', description: 'Facile' }, { subject: 'Camminata 11 km', date: '2026-05-07', description: 'Medio' }, { subject: 'Riposo', date: '2026-05-08', description: 'Recupero' }, { subject: 'Forza + 3 km', date: '2026-05-09', description: 'Smonto' }, { subject: 'Lungo 15 km', date: '2026-05-10', description: 'Obiettivo settimana' }];
-    const state = { xp: 285, level: 4, xpTarget: 360, streak: 5, stamps: 6, caminoKm: 61, workouts: [] };
-    const stageThresholds = [0, 35, 55, 80, 120, 190, 280, 390, 500, 600, 690, 745, 780];
-    const stageNodes = [[88,474],[160,430],[222,338],[308,264],[418,214],[522,282],[638,270],[742,180],[832,154],[932,220],[1032,218],[1098,156],[1152,88]];
-    const $ = (sel) => document.querySelector(sel); const timeline = $('#timeline');
-    function todayISO() { return '2026-04-23'; }
-    function getCurrentPhase(date) { return phasePlan.find(p => date >= p.start && date <= p.end) || phasePlan[0]; }
-    function getTodayQuest(date) { return csvQuests.find(q => q.date === date) || csvQuests[0]; }
-    function interpolatePosition(value) { const max = 780; const v = Math.max(0, Math.min(value, max)); for (let i = 0; i < stageThresholds.length - 1; i++) { const a = stageThresholds[i], b = stageThresholds[i + 1]; if (v >= a && v <= b) { const t = (v - a) / (b - a || 1); const [x1, y1] = stageNodes[i]; const [x2, y2] = stageNodes[i + 1]; return [x1 + (x2 - x1) * t, y1 + (y2 - y1) * t]; } } return stageNodes[stageNodes.length - 1]; }
-    function updateHero() { $('#levelValue').textContent = state.level; $('#streakValue').textContent = `${state.streak} giorni`; $('#stampValue').textContent = `${state.stamps} / 16`; $('#caminoValue').textContent = `${Math.round(state.caminoKm)} / 780`; $('#xpText').textContent = `${state.xp} / ${state.xpTarget} XP`; $('#xpFill').style.width = `${Math.min(100, (state.xp / state.xpTarget) * 100)}%`; const [x, y] = interpolatePosition(state.caminoKm); $('#playerMarker').setAttribute('transform', `translate(${x} ${y})`); document.querySelectorAll('.stage-dot').forEach((dot, idx) => { if (stageThresholds[idx] <= state.caminoKm) dot.classList.add('done'); }); }
-    function appendTimeline(entry) { const row = document.createElement('div'); row.className = 'timeline-item'; row.innerHTML = `<div class="bullet"></div><div><strong>${entry.title}</strong><span>${entry.meta}</span><p>${entry.text}</p></div>`; timeline.prepend(row); }
-    function computeReward({ tipo, km, diff, aderenza }) { const phase = getCurrentPhase(todayISO()); const weights = phase.weight; const presence = 25; const consistency = Math.min(30, 10 + state.streak * 2.5); const effortBase = (Number(diff) - 1) * 8 + (tipo === 'lungo' ? 10 : 0) + (tipo === 'salita' ? 12 : 0) + (tipo === 'forza' ? 8 : 0); const distanceBase = Math.min(30, Number(km || 0) * 2.2); const planBonus = Number(aderenza) * 8; const xp = Math.round(presence * weights.presence + consistency * weights.consistency + (effortBase + planBonus) * weights.effort + distanceBase * weights.distance + 18); const caminoGain = Math.max(1.5, xp * 0.22 + Number(km || 0) * 0.35); return { xp, caminoGain }; }
-    function maybeLevelUp() { while (state.xp >= state.xpTarget) { state.xp -= state.xpTarget; state.level += 1; state.xpTarget = Math.round(state.xpTarget * 1.18); state.stamps += 1; appendTimeline({ title: `Livello ${state.level} raggiunto`, meta: 'Ricompensa progresso', text: 'Hai guadagnato un timbro bonus di progressione. La costanza sta diventando potenza reale.' }); } }
-    function setTodayQuest() { const quest = getTodayQuest(todayISO()); $('#todayQuest').textContent = quest.subject; $('#todayDesc').textContent = quest.description; $('#data').value = todayISO(); }
-    $('#trainingForm').addEventListener('submit', (e) => { e.preventDefault(); const tipo = $('#tipo').value; const km = parseFloat($('#km').value || '0'); const tempo = parseInt($('#tempo').value || '0', 10); const diff = $('#difficolta').value; const aderenza = $('#aderenza').value; const note = $('#note').value.trim(); const reward = computeReward({ tipo, km, diff, aderenza }); state.xp += reward.xp; state.caminoKm += reward.caminoGain; state.streak += 1; if (tipo === 'lungo' || tipo === 'salita' || tipo === 'forza') state.stamps += 1; maybeLevelUp(); updateHero(); appendTimeline({ title: `${tipo.charAt(0).toUpperCase() + tipo.slice(1)} registrato • +${reward.xp} XP`, meta: `${$('#data').value} • ${km} km • ${tempo} min`, text: note || `Ricompensa behavior-first applicata. Avanzamento Camino: +${reward.caminoGain.toFixed(1)} km virtuali.` }); e.target.reset(); $('#km').value = 4; $('#tempo').value = 45; $('#difficolta').value = 2; $('#aderenza').value = 2; $('#data').value = todayISO(); });
-    $('[data-fill-demo]').addEventListener('click', () => { const reward = computeReward({ tipo: 'camminata', km: 4, diff: 2, aderenza: 3 }); state.xp += reward.xp; state.caminoKm += reward.caminoGain; state.streak += 1; state.stamps += 1; maybeLevelUp(); updateHero(); appendTimeline({ title: `Demo quest completata • +${reward.xp} XP`, meta: 'Sistema di ricompensa', text: `Hai ricevuto un timbro per presenza e continuità. Progresso Camino: +${reward.caminoGain.toFixed(1)} km.` }); });
-    $('[data-scroll-log]').addEventListener('click', () => { $('#logAllenamento').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
-    setTodayQuest(); updateHero();
-  </script>
+  <script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+  // === CONFIG SUPABASE ===
+  const SUPABASE_URL = "https://wcimqoqnojkklvpxevft.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_f2fRVxnzTjqxRf_KScCIAw_KIOFa0we";
+
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY); // [web:69][web:73]
+
+  // === ELEMENTI BASE DOM ===
+  const $ = (sel) => document.querySelector(sel);
+  const authForm = $("#authForm");
+  const authEmailInput = $("#authEmail");
+  const authStatus = $("#authStatus");
+  const authUserLabel = $("#authUserLabel");
+  const logoutBtn = $("#logoutBtn");
+  const timeline = $("#timeline");
+
+  // === PIANO FASI + QUEST (da CSV hardcodato per ora) ===
+  const phasePlan = [
+    {
+      phase: "Fase 1 — Adattamento",
+      start: "2026-04-22",
+      end: "2026-05-31",
+      objective: "Costanza, dolore sotto controllo, base aerobica",
+      weight: { presence: 0.45, consistency: 0.25, effort: 0.2, distance: 0.1 },
+    },
+    {
+      phase: "Fase 2 — Costruzione",
+      start: "2026-06-01",
+      end: "2026-06-30",
+      objective: "Aumentare km, introdurre salite",
+      weight: { presence: 0.35, consistency: 0.25, effort: 0.2, distance: 0.2 },
+    },
+    {
+      phase: "Fase 3 — Specifica montagna",
+      start: "2026-07-01",
+      end: "2026-07-31",
+      objective: "Trekking, lunghi, doppi giorni",
+      weight: { presence: 0.25, consistency: 0.2, effort: 0.25, distance: 0.3 },
+    },
+    {
+      phase: "Fase 4 — Rifinitura",
+      start: "2026-08-01",
+      end: "2026-08-31",
+      objective: "Arrivare fresco, non stanco",
+      weight: { presence: 0.35, consistency: 0.25, effort: 0.2, distance: 0.2 },
+    },
+  ];
+
+  const csvQuests = [
+    { subject: "Camminata 4 km", date: "2026-04-23", description: "Facile + mobilità schiena" },
+    { subject: "Forza + 3 km", date: "2026-04-24", description: "Allenamento forza + camminata leggera" },
+    { subject: "Camminata 6 km", date: "2026-04-25", description: "Ritmo facile, pause regolari" },
+    { subject: "Camminata 8 km", date: "2026-04-26", description: "Lento e regolare" },
+    { subject: "Camminata 10 km", date: "2026-04-27", description: "Medio, ritmo facile" },
+    { subject: "Riposo", date: "2026-04-28", description: "Recupero totale" },
+    { subject: "Forza + 3 km", date: "2026-04-29", description: "Smonto: forza + camminata leggera" },
+    { subject: "Lungo 12 km", date: "2026-04-30", description: "Con pause e alimentazione" },
+    { subject: "Camminata 4 km", date: "2026-05-01", description: "Easy o forza" },
+    { subject: "Camminata 5 km", date: "2026-05-02", description: "Ritmo facile" },
+    { subject: "Lungo 13 km", date: "2026-05-03", description: "Progressivo" },
+    { subject: "Lungo 14 km", date: "2026-05-04", description: "Costante" },
+    { subject: "Forza + 3 km", date: "2026-05-05", description: "Mattina lavoro" },
+    { subject: "Camminata 5 km", date: "2026-05-06", description: "Facile" },
+    { subject: "Camminata 11 km", date: "2026-05-07", description: "Medio" },
+    { subject: "Riposo", date: "2026-05-08", description: "Recupero" },
+    { subject: "Forza + 3 km", date: "2026-05-09", description: "Smonto" },
+    { subject: "Lungo 15 km", date: "2026-05-10", description: "Obiettivo settimana" },
+  ];
+
+  const state = {
+    user: null,
+    xp: 0,
+    level: 1,
+    xpTarget: 120,
+    streak: 0,
+    stamps: 0,
+    caminoKm: 0,
+  };
+
+  const stageThresholds = [0, 35, 55, 80, 120, 190, 280, 390, 500, 600, 690, 745, 780];
+  const stageNodes = [
+    [88, 474],
+    [160, 430],
+    [222, 338],
+    [308, 264],
+    [418, 214],
+    [522, 282],
+    [638, 270],
+    [742, 180],
+    [832, 154],
+    [932, 220],
+    [1032, 218],
+    [1098, 156],
+    [1152, 88],
+  ];
+
+  function todayISO() {
+    const d = new Date();
+    return d.toISOString().slice(0, 10);
+  }
+
+  function getCurrentPhase(date) {
+    return phasePlan.find((p) => date >= p.start && date <= p.end) || phasePlan[0];
+  }
+
+  function getTodayQuest(date) {
+    return csvQuests.find((q) => q.date === date) || csvQuests[0];
+  }
+
+  function interpolatePosition(value) {
+    const max = 780;
+    const v = Math.max(0, Math.min(value, max));
+    for (let i = 0; i < stageThresholds.length - 1; i++) {
+      const a = stageThresholds[i],
+        b = stageThresholds[i + 1];
+      if (v >= a && v <= b) {
+        const t = (v - a) / (b - a || 1);
+        const [x1, y1] = stageNodes[i];
+        const [x2, y2] = stageNodes[i + 1];
+        return [x1 + (x2 - x1) * t, y1 + (y2 - y1) * t];
+      }
+    }
+    return stageNodes[stageNodes.length - 1];
+  }
+
+  function updateHero() {
+    $("#levelValue").textContent = state.level;
+    $("#streakValue").textContent = `${state.streak} giorni`;
+    $("#stampValue").textContent = `${state.stamps} / 16`;
+    $("#caminoValue").textContent = `${Math.round(state.caminoKm)} / 780`;
+    $("#xpText").textContent = `${state.xp} / ${state.xpTarget} XP`;
+    $("#xpFill").style.width = `${Math.min(100, (state.xp / state.xTarget || state.xpTarget) * 100)}%`;
+
+    const [x, y] = interpolatePosition(state.caminoKm);
+    $("#playerMarker").setAttribute("transform", `translate(${x} ${y})`);
+
+    document.querySelectorAll(".stage-dot").forEach((dot, idx) => {
+      if (stageThresholds[idx] <= state.caminoKm) dot.classList.add("done");
+    });
+  }
+
+  function appendTimeline(entry) {
+    const row = document.createElement("div");
+    row.className = "timeline-item";
+    row.innerHTML = `<div class="bullet"></div><div><strong>${entry.title}</strong><span>${entry.meta}</span><p>${entry.text}</p></div>`;
+    timeline.prepend(row);
+  }
+
+  function computeReward({ tipo, km, diff, aderenza }) {
+    const phase = getCurrentPhase(todayISO());
+    const weights = phase.weight;
+    const presence = 25;
+    const consistency = Math.min(30, 10 + state.streak * 2.5);
+    const effortBase =
+      (Number(diff) - 1) * 8 +
+      (tipo === "lungo" ? 10 : 0) +
+      (tipo === "salita" ? 12 : 0) +
+      (tipo === "forza" ? 8 : 0);
+    const distanceBase = Math.min(30, Number(km || 0) * 2.2);
+    const planBonus = Number(aderenza) * 8;
+    const xp = Math.round(
+      presence * weights.presence +
+        consistency * weights.consistency +
+        (effortBase + planBonus) * weights.effort +
+        distanceBase * weights.distance +
+        18
+    );
+    const caminoGain = Math.max(1.5, xp * 0.22 + Number(km || 0) * 0.35);
+    return { xp, caminoGain };
+  }
+
+  function maybeLevelUp() {
+    while (state.xp >= state.xpTarget) {
+      state.xp -= state.xpTarget;
+      state.level += 1;
+      state.xpTarget = Math.round(state.xpTarget * 1.18);
+      state.stamps += 1;
+      appendTimeline({
+        title: `Livello ${state.level} raggiunto`,
+        meta: "Ricompensa progresso",
+        text: "Hai guadagnato un timbro bonus di progressione. La costanza sta diventando potenza reale.",
+      });
+    }
+  }
+
+  async function loadProgress() {
+    if (!state.user) return;
+    const { data, error } = await supabase
+      .from("progress")
+      .select("*")
+      .eq("user_id", state.user.id)
+      .maybeSingle();
+    if (error) {
+      console.error("Errore loadProgress", error);
+      return;
+    }
+    if (data) {
+      state.xp = data.xp;
+      state.level = data.level;
+      state.xpTarget = data.xp_target;
+      state.streak = data.streak;
+      state.stamps = data.stamps;
+      state.caminoKm = Number(data.camino_km || 0);
+    } else {
+      const { error: insErr } = await supabase.from("progress").insert({
+        user_id: state.user.id,
+        xp: 0,
+        level: 1,
+        xp_target: 120,
+        streak: 0,
+        stamps: 0,
+        camino_km: 0,
+        phase: 1,
+      });
+      if (insErr) console.error("Errore init progress", insErr);
+      state.xp = 0;
+      state.level = 1;
+      state.xpTarget = 120;
+      state.streak = 0;
+      state.stamps = 0;
+      state.caminoKm = 0;
+    }
+    updateHero();
+  }
+
+  async function saveProgress() {
+    if (!state.user) return;
+    const { error } = await supabase.from("progress").upsert({
+      user_id: state.user.id,
+      xp: state.xp,
+      level: state.level,
+      xp_target: state.xpTarget,
+      streak: state.streak,
+      stamps: state.stamps,
+      camino_km: state.caminoKm,
+      phase: getCurrentPhase(todayISO()).phase.includes("1") ? 1 : 1,
+      updated_at: new Date().toISOString(),
+    });
+    if (error) console.error("Errore saveProgress", error);
+  }
+
+  async function saveWorkout({ tipo, km, tempo, diff, aderenza, note, date }) {
+    if (!state.user) return;
+    const { error } = await supabase.from("workouts").insert({
+      user_id: state.user.id,
+      date,
+      type: tipo,
+      km,
+      minutes: tempo,
+      difficulty: Number(diff),
+      adherence: Number(aderenza),
+      notes: note || null,
+    });
+    if (error) console.error("Errore saveWorkout", error);
+  }
+
+  function setTodayQuest() {
+    const q = getTodayQuest(todayISO());
+    $("#todayQuest").textContent = q.subject;
+    $("#todayDesc").textContent = q.description;
+    $("#data").value = todayISO();
+  }
+
+  async function handleTrainingSubmit(e) {
+    e.preventDefault();
+    if (!state.user) {
+      alert("Devi prima accedere con la tua email (magic link).");
+      return;
+    }
+    const tipo = $("#tipo").value;
+    const km = parseFloat($("#km").value || "0");
+    const tempo = parseInt($("#tempo").value || "0", 10);
+    const diff = $("#difficolta").value;
+    const aderenza = $("#aderenza").value;
+    const note = $("#note").value.trim();
+    const date = $("#data").value || todayISO();
+
+    const reward = computeReward({ tipo, km, diff, aderenza });
+    state.xp += reward.xp;
+    state.caminoKm += reward.caminoGain;
+    state.streak += 1;
+    if (["lungo", "salita", "forza"].includes(tipo)) state.stamps += 1;
+    maybeLevelUp();
+    updateHero();
+
+    appendTimeline({
+      title: `${tipo.charAt(0).toUpperCase() + tipo.slice(1)} registrato • +${reward.xp} XP`,
+      meta: `${date} • ${km} km • ${tempo} min`,
+      text: note || `Ricompensa behavior-first applicata. Avanzamento Camino: +${reward.caminoGain.toFixed(
+        1
+      )} km virtuali.`,
+    });
+
+    await saveWorkout({ tipo, km, tempo, diff, aderenza, note, date });
+    await saveProgress();
+
+    e.target.reset();
+    $("#km").value = 4;
+    $("#tempo").value = 45;
+    $("#difficolta").value = 2;
+    $("#aderenza").value = 2;
+    $("#data").value = todayISO();
+  }
+
+  async function sendMagicLink(email) {
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: window.location.origin,
+      },
+    }); // [web:78][web:81]
+    if (error) {
+      console.error("Errore magic link", error);
+      alert("Errore nell’invio del link: " + error.message);
+      return;
+    }
+    alert("Ti ho inviato un link via email. Aprilo per entrare.");
+  }
+
+  function setAuthUI(user) {
+    if (user) {
+      authForm.style.display = "none";
+      authStatus.style.display = "flex";
+      authUserLabel.textContent = `Ciao ${user.email}`;
+    } else {
+      authForm.style.display = "flex";
+      authStatus.style.display = "none";
+      authUserLabel.textContent = "";
+    }
+  }
+
+  authForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const email = authEmailInput.value.trim();
+    if (!email) return;
+    sendMagicLink(email);
+  });
+
+  logoutBtn.addEventListener("click", async () => {
+    await supabase.auth.signOut();
+  });
+
+  supabase.auth.onAuthStateChange(async (event, session) => {
+    state.user = session?.user ?? null;
+    setAuthUI(state.user);
+    if (state.user) {
+      await loadProgress();
+    }
+  });
+
+  // Pulsante scroll al form
+  document.querySelector("[data-scroll-log]").addEventListener("click", () => {
+    $("#logAllenamento").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+  // Form allenamento
+  $("#trainingForm").addEventListener("submit", handleTrainingSubmit);
+
+  // Quest iniziale + tentativo di recuperare sessione esistente
+  setTodayQuest();
+  (async () => {
+    const { data } = await supabase.auth.getSession();
+    state.user = data.session?.user ?? null;
+    setAuthUI(state.user);
+    if (state.user) await loadProgress();
+    updateHero();
+  })();
+</script>
 </body>
 </html>
