@@ -438,13 +438,17 @@
 
   // Quest iniziale + tentativo di recuperare sessione esistente
   setTodayQuest();
-  (async () => {
-    const { data } = await supabase.auth.getSession();
-    state.user = data.session?.user ?? null;
-    setAuthUI(state.user);
-    if (state.user) await loadProgress();
-    updateHero();
-  })();
+(async () => {
+  const { data } = await supabase.auth.getSession();
+  state.user = data.session?.user ?? null;
+  setAuthUI(state.user);
+  if (state.user) {
+    await loadProgress();  // prima legge da Supabase
+    updateHero();          // poi aggiorna la UI con i dati reali
+  } else {
+    updateHero();          // utente non loggato → mostra stato vuoto
+  }
+})();
 </script>
 </body>
 </html>
