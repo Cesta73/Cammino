@@ -386,7 +386,7 @@
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: window.location.origin,
+        emailRedirectTo: "https://cesta73.github.io/Cammino/"
       },
     }); // [web:78][web:81]
     if (error) {
