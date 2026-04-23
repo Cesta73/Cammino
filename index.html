@@ -126,7 +126,7 @@ body{background:var(--bg);color:var(--text);font-family:'Crimson Text',Georgia,s
     <div class="section-title">Il tuo cammino — Camino Francés</div>
     <div class="map-card">
       <div class="map-svg-wrap">
-        <svg id="mapSvg" viewBox="0 0 1200 520" width="100%" height="260">
+        <svg id="mapSvg" viewBox="0 0 1200 540" preserveAspectRatio="xMidYMid meet" style="width:100%;height:auto"></svg>
           <defs>
             <filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
           </defs>
@@ -158,7 +158,7 @@ body{background:var(--bg);color:var(--text);font-family:'Crimson Text',Georgia,s
             ircle class="stage-dot" cx="1152" cy="88" r="9" fill="#e2b65b" opacity=".9" filter="url(#glow)"/>
           </g>
           <!-- etichette tappe -->
-          <g font-family="'Cinzel',serif" font-size="11" fill="#b6b09f">
+          <g font-family="'Cinzel',serif" font-size="13" fill="#b6b09f">
             <text x="70" y="495">St-Jean</text>
             <text x="140" y="450">Pamplona</text>
             <text x="200" y="358">Logroño</text>
