@@ -6,291 +6,743 @@
 <title>Camino Pellegrino RPG</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
-:root{--gold:#e2b65b;--gold-dim:rgba(226,182,91,.18);--gold-border:rgba(226,182,91,.35);--bg:#080c14;--bg2:#0d1118;--bg3:#131822;--text:#f7f1de;--muted:#b6b09f;--green:#4caf7d;--radius:14px}
+:root{
+  --gold:#e2b65b;
+  --gold-dim:rgba(226,182,91,.18);
+  --gold-border:rgba(226,182,91,.35);
+  --bg:#080c14;
+  --bg2:#0d1118;
+  --bg3:#131822;
+  --text:#f7f1de;
+  --muted:#b6b09f;
+  --green:#4caf7d;
+  --radius:14px
+}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:'Crimson Text',Georgia,serif;min-height:100vh;line-height:1.55}
-.topbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;padding:.75rem 1.5rem;background:rgba(8,12,20,.92);border-bottom:1px solid var(--gold-border);position:sticky;top:0;z-index:100;backdrop-filter:blur(8px)}
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:.5rem;padding:.75rem 1.5rem;
+  background:rgba(8,12,20,.92);border-bottom:1px solid var(--gold-border);
+  position:sticky;top:0;z-index:100;backdrop-filter:blur(8px)
+}
 .auth-form{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
-.auth-form input{min-width:220px;padding:.5rem .9rem;border-radius:999px;border:1px solid var(--gold-border);background:var(--bg2);color:var(--text);font-size:.85rem}
+.auth-form input{
+  min-width:220px;padding:.5rem .9rem;border-radius:999px;
+  border:1px solid var(--gold-border);background:var(--bg2);
+  color:var(--text);font-size:.85rem
+}
 #authStatus{display:none;align-items:center;gap:.5rem}
 #authUserLabel{font-size:.8rem;color:var(--muted)}
-.chip{padding:.45rem 1.1rem;border-radius:999px;border:1px solid var(--gold-border);background:var(--gold-dim);color:var(--gold);font-family:'Cinzel',serif;font-size:.78rem;cursor:pointer;transition:background .2s}
+.chip{
+  padding:.45rem 1.1rem;border-radius:999px;border:1px solid var(--gold-border);
+  background:var(--gold-dim);color:var(--gold);font-family:'Cinzel',serif;
+  font-size:.78rem;cursor:pointer;transition:background .2s
+}
 .chip:hover{background:rgba(226,182,91,.3)}
-.primary{padding:.5rem 1.4rem;border-radius:999px;background:var(--gold);color:var(--bg);font-family:'Cinzel',serif;font-size:.82rem;font-weight:700;border:none;cursor:pointer;transition:opacity .2s}
+.primary{
+  padding:.5rem 1.4rem;border-radius:999px;background:var(--gold);color:var(--bg);
+  font-family:'Cinzel',serif;font-size:.82rem;font-weight:700;border:none;
+  cursor:pointer;transition:opacity .2s
+}
 .primary:hover{opacity:.88}
 .container{max-width:1300px;margin:0 auto;padding:2rem 1.5rem}
 .hero{display:grid;grid-template-columns:1fr 320px;gap:1.5rem;margin-bottom:2rem}
 @media(max-width:768px){.hero{grid-template-columns:1fr}}
-.hero-text,.level-card,.quest-card,.map-card,.form-card,.timeline-card{background:var(--bg3);border:1px solid var(--gold-border);border-radius:var(--radius);padding:1.5rem}
+.hero-text,.level-card,.quest-card,.map-card,.form-card,.timeline-card{
+  background:var(--bg3);border:1px solid var(--gold-border);border-radius:var(--radius);padding:1.5rem
+}
 .hero-text{padding:2rem}
-.overline{font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.15em;color:var(--gold);margin-bottom:.5rem;text-transform:uppercase}
-.hero-title{font-family:'Cinzel',serif;font-size:clamp(2rem,4vw,3.2rem);font-weight:900;line-height:1.1;margin-bottom:1rem}
+.overline{
+  font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.15em;
+  color:var(--gold);margin-bottom:.5rem;text-transform:uppercase
+}
+.hero-title{
+  font-family:'Cinzel',serif;font-size:clamp(2rem,4vw,3.2rem);
+  font-weight:900;line-height:1.1;margin-bottom:1rem
+}
 .hero-desc{color:var(--muted);font-size:1rem;margin-bottom:1.5rem}
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}
 @media(max-width:500px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
-.stat-card{background:var(--bg2);border:1px solid var(--gold-border);border-radius:10px;padding:.85rem 1rem}
-.stat-label{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.12em;color:var(--muted);margin-bottom:.3rem;text-transform:uppercase}
+.stat-card{
+  background:var(--bg2);border:1px solid var(--gold-border);
+  border-radius:10px;padding:.85rem 1rem
+}
+.stat-label{
+  font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.12em;
+  color:var(--muted);margin-bottom:.3rem;text-transform:uppercase
+}
 .stat-value{font-family:'Cinzel',serif;font-size:1.6rem;color:var(--gold);font-weight:700}
 .stat-sub{font-size:.8rem;color:var(--muted)}
 .hero-side{display:flex;flex-direction:column;gap:1rem}
 .level-card{text-align:center}
-.level-label{font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.15em;color:var(--muted);margin-bottom:.5rem;text-transform:uppercase}
+.level-label{
+  font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.15em;
+  color:var(--muted);margin-bottom:.5rem;text-transform:uppercase
+}
 .ring-wrap{position:relative;width:130px;height:130px;margin:0 auto .75rem}
 .ring-wrap svg{transform:rotate(-90deg)}
 .ring-bg{fill:none;stroke:rgba(226,182,91,.12);stroke-width:8}
-.ring-fill{fill:none;stroke:var(--gold);stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset .6s ease}
-.ring-level{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Cinzel',serif;font-size:2.4rem;font-weight:900;color:var(--gold)}
+.ring-fill{
+  fill:none;stroke:var(--gold);stroke-width:8;stroke-linecap:round;
+  transition:stroke-dashoffset .6s ease
+}
+.ring-level{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-family:'Cinzel',serif;font-size:2.4rem;font-weight:900;color:var(--gold)
+}
 .xp-bar-wrap{background:rgba(226,182,91,.1);border-radius:999px;height:6px;overflow:hidden;margin-bottom:.4rem}
 .xp-bar-fill{height:100%;background:var(--green);border-radius:999px;transition:width .5s ease}
 .xp-text{font-size:.8rem;color:var(--muted)}
 .quest-card .quest-title{font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;margin-bottom:.3rem}
 .quest-card .quest-desc{color:var(--muted);font-size:.9rem}
 .map-section,.form-section,.timeline-section{margin-bottom:2rem}
-.section-title{font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.15em;color:var(--gold);margin-bottom:1rem;text-transform:uppercase}
-.map-svg-wrap{width:100%;overflow-x:auto;background:var(--bg2);border-radius:8px;padding:1rem}
+.section-title{
+  font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.15em;
+  color:var(--gold);margin-bottom:1rem;text-transform:uppercase
+}
+.map-svg-wrap{
+  width:100%;overflow-x:auto;background:var(--bg2);
+  border-radius:8px;padding:1rem
+}
 .map-svg-wrap svg{display:block;width:100%;height:auto}
 .form-card h2{font-family:'Cinzel',serif;font-size:1rem;font-weight:700;margin-bottom:1.25rem;color:var(--gold)}
 .form-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem}
 .field{display:flex;flex-direction:column;gap:.35rem}
-.field label{font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
-.field input,.field select,.field textarea{background:var(--bg2);border:1px solid var(--gold-border);border-radius:8px;color:var(--text);padding:.55rem .8rem;font-family:'Crimson Text',serif;font-size:.95rem}
+.field label{
+  font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.1em;
+  color:var(--muted);text-transform:uppercase
+}
+.field input,.field select,.field textarea{
+  background:var(--bg2);border:1px solid var(--gold-border);border-radius:8px;
+  color:var(--text);padding:.55rem .8rem;font-family:'Crimson Text',serif;font-size:.95rem
+}
 .field textarea{grid-column:1/-1;resize:vertical;min-height:60px}
 .form-footer{margin-top:1.25rem;display:flex;gap:.75rem;flex-wrap:wrap;align-items:center}
 #formMsg{font-size:.85rem;color:var(--green)}
-.timeline-item{display:flex;gap:1rem;padding:.85rem 0;border-bottom:1px solid rgba(226,182,91,.1)}
+.timeline-item{
+  display:flex;gap:1rem;padding:.85rem 0;
+  border-bottom:1px solid rgba(226,182,91,.1)
+}
 .timeline-item:last-child{border-bottom:none}
 .bullet{width:10px;height:10px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:.45rem}
 .timeline-item>div>strong{font-size:1rem;color:var(--text);display:block}
 .timeline-item>div>span{font-size:.8rem;color:var(--muted);display:block;margin-bottom:.2rem}
 .timeline-item>div>p{font-size:.9rem;color:var(--muted)}
 #emptyLog{color:var(--muted);font-size:.9rem;font-style:italic;padding:.5rem 0}
-#compostelaOverlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.92);align-items:center;justify-content:center}
-.compostela-box{background:var(--bg3);border:2px solid var(--gold);border-radius:20px;padding:3rem 2.5rem;text-align:center;max-width:480px}
+#compostelaOverlay{
+  display:none;position:fixed;inset:0;z-index:200;
+  background:rgba(0,0,0,.92);align-items:center;justify-content:center
+}
+.compostela-box{
+  background:var(--bg3);border:2px solid var(--gold);border-radius:20px;
+  padding:3rem 2.5rem;text-align:center;max-width:480px
+}
 .compostela-box h1{font-family:'Cinzel',serif;font-size:2.5rem;color:var(--gold);margin-bottom:1rem}
 .compostela-box p{color:var(--muted);margin-bottom:1.5rem}
 </style>
 </head>
 <body>
+
 <header class="topbar">
-<form id="authForm" class="auth-form">
-<input id="authEmail" type="email" placeholder="email per magic link" required/>
-<button type="submit" class="chip">Invia link</button>
-</form>
-<div id="authStatus">
-<span id="authUserLabel"></span>
-<button type="button" class="chip" id="logoutBtn">Esci</button>
-</div>
-<button type="button" class="primary" id="scrollToForm">Registra allenamento</button>
+  <form id="authForm" class="auth-form">
+    <input id="authEmail" type="email" placeholder="email per magic link" required/>
+    <button type="submit" class="chip">Invia link</button>
+  </form>
+  <div id="authStatus">
+    <span id="authUserLabel"></span>
+    <button type="button" class="chip" id="logoutBtn">Esci</button>
+  </div>
+  <button type="button" class="primary" id="scrollToForm">Registra allenamento</button>
 </header>
+
 <main class="container">
-<section class="hero">
-<div class="hero-text">
-<div class="overline">Camino Francés • Saint-Jean → Santiago</div>
-<h1 class="hero-title">Cammina ogni giorno.<br>Scrivi la tua Compostela.</h1>
-<p class="hero-desc">Muoversi conta, anche poco. I timbri e l'XP arrivano da costanza, impegno e progressione — non solo dalla distanza.</p>
-<div class="stats-grid">
-<div class="stat-card"><div class="stat-label">Livello</div><div class="stat-value" id="levelValue">1</div></div>
-<div class="stat-card"><div class="stat-label">Streak</div><div class="stat-value" id="streakValue">0</div><div class="stat-sub">giorni</div></div>
-<div class="stat-card"><div class="stat-label">Timbri</div><div class="stat-value" id="stampValue">0/16</div></div>
-<div class="stat-card"><div class="stat-label">Km Camino</div><div class="stat-value" id="caminoValue">0/780</div></div>
-</div>
-</div>
-<div class="hero-side">
-<div class="level-card">
-<div class="level-label">Livello pellegrino</div>
-<div class="ring-wrap">
-<svg viewBox="0 0 130 130" width="130" height="130">
-ircle class="ring-bg" cx="65" cy="65" r="54"/>
-ircle class="ring-fill" id="ringFill" cx="65" cy="65" r="54" stroke-dasharray="339.3" stroke-dashoffset="339.3"/>
-</svg>
-<div class="ring-level" id="ringLevel">I</div>
-</div>
-<div class="xp-bar-wrap"><div class="xp-bar-fill" id="xpFill" style="width:0%"></div></div>
-<div class="xp-text" id="xpText">0/120 XP</div>
-</div>
-<div class="quest-card">
-<div class="overline">Missione attuale</div>
-<div class="quest-title" id="todayQuest">—</div>
-<div class="quest-desc" id="todayDesc">Carica il piano allenamento</div>
-</div>
-</div>
-</section>
-<section class="map-section">
-<div class="section-title">Il tuo cammino — Camino Francés</div>
-<div class="map-card">
-<div class="map-svg-wrap">
-<svg id="mapSvg" viewBox="0 0 1200 540" style="width:100%;height:auto">
-<defs><filter id="glow"><feGaussianBlur stdDeviation="3"/></filter></defs>
-<rect width="1200" height="540" fill="#080c14"/>
-<polyline id="routePath" points="88,474 160,430 222,338 308,264 418,214 522,282 638,270 742,180 832,154 932,220 1032,218 1098,156 1152,88" fill="none" stroke="rgba(226,182,91,.2)" stroke-width="3" stroke-dasharray="8,6"/>
-<polyline id="donePath" points="88,474" fill="none" stroke="#e2b65b" stroke-width="3.5"/>
-<g id="stageNodes">
-ircle class="stage-dot" cx="88" cy="474" r="7" fill="#e2b65b" opacity=".9"/>
-ircle class="stage-dot" cx="160" cy="430" r="6" fill="#e2b65b" opacity=".4"/>
-ircle class="stage-dot" cx="222" cy="338" r="6" fill="#e2b65b" opacity=".4"/>
-ircle class="stage-dot" cx="308" cy="264" r="6" fill="#e2b65b" opacity=".4"/>
-ircle class="stage-dot" cx="418" cy="214" r="6" fill="#e2b65b" opacity=".4"/>
-ircle class="stage-dot" cx="522" cy="282" r="6" fill="#e2b65b" opacity=".4"/>
-ircle class="stage-dot" cx="638" cy="270" r="6" fill="#e2b65b" opacity=".4"/>
-ircle class="stage-dot" cx="742" cy="180" r="6" fill="#e2b65b" opacity=".4"/>
-ircle class="stage-dot" cx="832" cy="154" r="6" fill="#e2b65b" opacity=".4"/>
-ircle class="stage-dot" cx="932" cy="220" r="6" fill="#e2b65b" opacity=".4"/>
-ircle class="stage-dot" cx="1032" cy="218" r="6" fill="#e2b65b" opacity=".4"/>
-ircle class="stage-dot" cx="1098" cy="156" r="6" fill="#e2b65b" opacity=".4"/>
-ircle class="stage-dot" cx="1152" cy="88" r="9" fill="#e2b65b" opacity=".9" filter="url(#glow)"/>
-</g>
-<g font-family="'Cinzel',serif" font-size="13" fill="#b6b09f">
-<text x="70" y="495">St-Jean</text>
-<text x="140" y="450">Pamplona</text>
-<text x="200" y="358">Logroño</text>
-<text x="288" y="284">Burgos</text>
-<text x="398" y="234">León</text>
-<text x="500" y="302">Ponferrada</text>
-<text x="616" y="290">Sarria</text>
-<text x="722" y="200">Lugo</text>
-<text x="810" y="174">Portomarín</text>
-<text x="910" y="240">Palas</text>
-<text x="1010" y="238">Arzúa</text>
-<text x="1076" y="176">Pedrouzo</text>
-<text x="1125" y="78" fill="#e2b65b" font-size="14" font-weight="700">Santiago ✦</text>
-</g>
-<g id="playerMarker" transform="translate(88 474)">
-ircle r="12" fill="#e2b65b" opacity=".25"/>
-ircle r="6" fill="#e2b65b"/>
-<text y="-16" text-anchor="middle" font-size="14">🚶</text>
-</g>
-</svg>
-</div>
-</div>
-<section class="form-section" id="logAllenamento">
-<div class="section-title">Registra allenamento</div>
-<div class="form-card">
-<h2>Nuova sessione</h2>
-<form id="trainingForm">
-<div class="form-grid">
-<div class="field">
-abel>Data</label>
-<input type="date" id="data"/>
-</div>
-<div class="field">
-abel>Tipo attività</label>
-<select id="tipo">
-<option value="camminata">Camminata</option>
-<option value="lungo">Lungo (&gt;10km)</option>
-<option value="salita">Salita / Dislivello</option>
-<option value="forza">Forza</option>
-<option value="recupero">Recupero / Riposo attivo</option>
-</select>
-</div>
-<div class="field">
-abel>Km percorsi</label>
-<input type="number" id="km" min="0" max="50" step="0.1" value="4"/>
-</div>
-<div class="field">
-abel>Minuti totali</label>
-<input type="number" id="tempo" min="0" max="600" value="45"/>
-</div>
-<div class="field">
-abel>Difficoltà (1–5)</label>
-<select id="difficolta">
-<option value="1">1 — Facile</option>
-<option value="2" selected>2 — Moderata</option>
-<option value="3">3 — Media</option>
-<option value="4">4 — Impegnativa</option>
-<option value="5">5 — Massima</option>
-</select>
-</div>
-<div class="field">
-abel>Aderenza al piano (1–5)</label>
-<select id="aderenza">
-<option value="1">1 — Per niente</option>
-<option value="2" selected>2 — Parziale</option>
-<option value="3">3 — Buona</option>
-<option value="4">4 — Molto buona</option>
-<option value="5">5 — Perfetta</option>
-</select>
-</div>
-<div class="field" style="grid-column:1/-1">
-abel>Note (opzionale)</label>
-<textarea id="note" placeholder="Come ti sei sentito? Dolori? Meteo?"></textarea>
-</div>
-</div>
-<div class="form-footer">
-<button type="submit" class="primary">Salva allenamento</button>
-<span id="formMsg"></span>
-</div>
-</form>
-</div>
-</section>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-text">
+      <div class="overline">Camino Francés • Saint-Jean → Santiago</div>
+      <h1 class="hero-title">Cammina ogni giorno.<br>Scrivi la tua Compostela.</h1>
+      <p class="hero-desc">
+        Muoversi conta, anche poco. I timbri e l'XP arrivano da costanza,
+        impegno e progressione — non solo dalla distanza.
+      </p>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Livello</div>
+          <div class="stat-value" id="levelValue">1</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Streak</div>
+          <div class="stat-value" id="streakValue">0</div>
+          <div class="stat-sub">giorni</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Timbri</div>
+          <div class="stat-value" id="stampValue">0/16</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Km Camino</div>
+          <div class="stat-value" id="caminoValue">0/780</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-side">
+      <div class="level-card">
+        <div class="level-label">Livello pellegrino</div>
+        <!-- FIX: tag <circle> corretti -->
+        <div class="ring-wrap">
+          <svg viewBox="0 0 130 130" width="130" height="130">
+            <circle class="ring-bg" cx="65" cy="65" r="54"/>
+            <circle class="ring-fill" id="ringFill" cx="65" cy="65" r="54"
+                    stroke-dasharray="339.3" stroke-dashoffset="339.3"/>
+          </svg>
+          <div class="ring-level" id="ringLevel">I</div>
+        </div>
+        <div class="xp-bar-wrap">
+          <div class="xp-bar-fill" id="xpFill" style="width:0%"></div>
+        </div>
+        <div class="xp-text" id="xpText">0/120 XP</div>
+      </div>
+
+      <div class="quest-card">
+        <div class="overline">Missione attuale</div>
+        <div class="quest-title" id="todayQuest">—</div>
+        <div class="quest-desc" id="todayDesc">Carica il piano allenamento</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAPPA — FIX: section ora correttamente chiusa -->
+  <section class="map-section">
+    <div class="section-title">Il tuo cammino — Camino Francés</div>
+    <div class="map-card">
+      <div class="map-svg-wrap">
+        <svg id="mapSvg" viewBox="0 0 1200 540" style="width:100%;height:auto">
+          <defs>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="3"/>
+            </filter>
+          </defs>
+          <rect width="1200" height="540" fill="#080c14"/>
+          <polyline id="routePath"
+            points="88,474 160,430 222,338 308,264 418,214 522,282 638,270 742,180 832,154 932,220 1032,218 1098,156 1152,88"
+            fill="none" stroke="rgba(226,182,91,.2)" stroke-width="3" stroke-dasharray="8,6"/>
+          <polyline id="donePath" points="88,474"
+            fill="none" stroke="#e2b65b" stroke-width="3.5"/>
+
+          <!-- FIX: tutti i <circle> corretti -->
+          <g id="stageNodes">
+            <circle class="stage-dot" cx="88"   cy="474" r="7" fill="#e2b65b" opacity=".9"/>
+            <circle class="stage-dot" cx="160"  cy="430" r="6" fill="#e2b65b" opacity=".4"/>
+            <circle class="stage-dot" cx="222"  cy="338" r="6" fill="#e2b65b" opacity=".4"/>
+            <circle class="stage-dot" cx="308"  cy="264" r="6" fill="#e2b65b" opacity=".4"/>
+            <circle class="stage-dot" cx="418"  cy="214" r="6" fill="#e2b65b" opacity=".4"/>
+            <circle class="stage-dot" cx="522"  cy="282" r="6" fill="#e2b65b" opacity=".4"/>
+            <circle class="stage-dot" cx="638"  cy="270" r="6" fill="#e2b65b" opacity=".4"/>
+            <circle class="stage-dot" cx="742"  cy="180" r="6" fill="#e2b65b" opacity=".4"/>
+            <circle class="stage-dot" cx="832"  cy="154" r="6" fill="#e2b65b" opacity=".4"/>
+            <circle class="stage-dot" cx="932"  cy="220" r="6" fill="#e2b65b" opacity=".4"/>
+            <circle class="stage-dot" cx="1032" cy="218" r="6" fill="#e2b65b" opacity=".4"/>
+            <circle class="stage-dot" cx="1098" cy="156" r="6" fill="#e2b65b" opacity=".4"/>
+            <circle class="stage-dot" cx="1152" cy="88"  r="9" fill="#e2b65b" opacity=".9"
+                    filter="url(#glow)"/>
+          </g>
+
+          <g font-family="'Cinzel',serif" font-size="13" fill="#b6b09f">
+            <text x="70"   y="495">St-Jean</text>
+            <text x="140"  y="450">Pamplona</text>
+            <text x="200"  y="358">Logroño</text>
+            <text x="288"  y="284">Burgos</text>
+            <text x="398"  y="234">León</text>
+            <text x="500"  y="302">Ponferrada</text>
+            <text x="616"  y="290">Sarria</text>
+            <text x="722"  y="200">Lugo</text>
+            <text x="810"  y="174">Portomarín</text>
+            <text x="910"  y="240">Palas</text>
+            <text x="1010" y="238">Arzúa</text>
+            <text x="1076" y="176">Pedrouzo</text>
+            <text x="1125" y="78" fill="#e2b65b" font-size="14" font-weight="700">Santiago ✦</text>
+          </g>
+
+          <g id="playerMarker" transform="translate(88 474)">
+            <circle r="12" fill="#e2b65b" opacity=".25"/>
+            <circle r="6"  fill="#e2b65b"/>
+            <text y="-16" text-anchor="middle" font-size="14">🚶</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+  <!-- FIX: section map-section ora chiusa correttamente qui sopra -->
+
+  <!-- FORM -->
+  <section class="form-section" id="logAllenamento">
+    <div class="section-title">Registra allenamento</div>
+    <div class="form-card">
+      <h2>Nuova sessione</h2>
+      <form id="trainingForm">
+        <div class="form-grid">
+
+          <!-- FIX: tutti i <label> corretti -->
+          <div class="field">
+            <label>Data</label>
+            <input type="date" id="data"/>
+          </div>
+          <div class="field">
+            <label>Tipo attività</label>
+            <select id="tipo">
+              <option value="camminata">Camminata</option>
+              <option value="lungo">Lungo (&gt;10km)</option>
+              <option value="salita">Salita / Dislivello</option>
+              <option value="forza">Forza</option>
+              <option value="recupero">Recupero / Riposo attivo</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Km percorsi</label>
+            <input type="number" id="km" min="0" max="50" step="0.1" value="4"/>
+          </div>
+          <div class="field">
+            <label>Minuti totali</label>
+            <input type="number" id="tempo" min="0" max="600" value="45"/>
+          </div>
+          <div class="field">
+            <label>Difficoltà (1–5)</label>
+            <select id="difficolta">
+              <option value="1">1 — Facile</option>
+              <option value="2" selected>2 — Moderata</option>
+              <option value="3">3 — Media</option>
+              <option value="4">4 — Impegnativa</option>
+              <option value="5">5 — Massima</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Aderenza al piano (1–5)</label>
+            <select id="aderenza">
+              <option value="1">1 — Per niente</option>
+              <option value="2" selected>2 — Parziale</option>
+              <option value="3">3 — Buona</option>
+              <option value="4">4 — Molto buona</option>
+              <option value="5">5 — Perfetta</option>
+            </select>
+          </div>
+          <div class="field" style="grid-column:1/-1">
+            <label>Note (opzionale)</label>
+            <textarea id="note" placeholder="Come ti sei sentito? Dolori? Meteo?"></textarea>
+          </div>
+
+        </div>
+        <div class="form-footer">
+          <button type="submit" class="primary">Salva allenamento</button>
+          <span id="formMsg"></span>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- TIMELINE — FIX: sezione aggiunta con id="timeline" e #emptyLog -->
+  <section class="timeline-section">
+    <div class="section-title">Diario del pellegrino</div>
+    <div class="timeline-card" id="timeline">
+      <p id="emptyLog">Nessun allenamento ancora registrato. Inizia il tuo cammino!</p>
+    </div>
+  </section>
+
 </main>
+
+<!-- COMPOSTELA OVERLAY -->
 <div id="compostelaOverlay">
-<div class="compostela-box">
-<h1>✦ Compostela ✦</h1>
-<p style="font-family:'Cinzel',serif;font-size:1.1rem;color:var(--gold);margin-bottom:.5rem">Buen Camino, Pellegrino</p>
-<p>Hai completato il Camino Francés. 780 km di costanza, impegno e determinazione. La Cattedrale di Santiago ti aspetta.</p>
-<button class="chip" onclick="document.getElementById('compostelaOverlay').style.display='none'">Chiudi</button>
+  <div class="compostela-box">
+    <h1>✦ Compostela ✦</h1>
+    <p style="font-family:'Cinzel',serif;font-size:1.1rem;color:var(--gold);margin-bottom:.5rem">
+      Buen Camino, Pellegrino
+    </p>
+    <p>
+      Hai completato il Camino Francés. 780 km di costanza, impegno e determinazione.
+      La Cattedrale di Santiago ti aspetta.
+    </p>
+    <button class="chip" onclick="document.getElementById('compostelaOverlay').style.display='none'">
+      Chiudi
+    </button>
+  </div>
 </div>
-</div>
+
 <script type="module">
-import{createClient}from"https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-const SUPABASE_URL="https://wcimqoqnojkklvpxevft.supabase.co";
-const SUPABASE_ANON_KEY="sb_publishable_f2fRVxnzTjqxRf_KScCIAw_KIOFa0we";
-const supabase=createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
-const $=s=>document.querySelector(s);
-const csvQuests=[
-{date:"2026-04-23",subject:"Camminata 4 km",description:"Facile + mobilità schiena"},
-{date:"2026-04-24",subject:"Forza + 3 km",description:"Allenamento forza + camminata leggera"},
-{date:"2026-04-25",subject:"Camminata 6 km",description:"Ritmo facile, pause regolari"},
-{date:"2026-04-26",subject:"Camminata 8 km",description:"Lento e regolare"},
-{date:"2026-04-27",subject:"Camminata 10 km",description:"Medio, ritmo facile"},
-{date:"2026-04-28",subject:"Riposo",description:"Recupero totale"},
-{date:"2026-04-29",subject:"Forza + 3 km",description:"Smonto: forza + camminata leggera"},
-{date:"2026-04-30",subject:"Lungo 12 km",description:"Con pause e alimentazione"},
-{date:"2026-05-01",subject:"Camminata 4 km",description:"Easy o forza"},
-{date:"2026-05-02",subject:"Camminata 5 km",description:"Ritmo facile"},
-{date:"2026-05-03",subject:"Lungo 13 km",description:"Progressivo"},
-{date:"2026-05-04",subject:"Lungo 14 km",description:"Costante"},
-{date:"2026-05-05",subject:"Forza + 3 km",description:"Mattina lavoro"},
-{date:"2026-05-06",subject:"Camminata 5 km",description:"Facile"},
-{date:"2026-05-07",subject:"Camminata 11 km",description:"Medio"},
-{date:"2026-05-08",subject:"Riposo",description:"Recupero"},
-{date:"2026-05-09",subject:"Forza + 3 km",description:"Smonto"},
-{date:"2026-05-10",subject:"Lungo 15 km",description:"Obiettivo settimana"}
+// FIX: versione Supabase fissa per stabilità
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+const SUPABASE_URL     = "https://wcimqoqnojkklvpxevft.supabase.co";
+// ⚠️  SOSTITUISCI con la tua chiave anon reale (inizia con "eyJ...")
+const SUPABASE_ANON_KEY = "sb_publishable_f2fRVxnzTjqxRf_KScCIAw_KIOFa0we";
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const $ = s => document.querySelector(s);
+
+// ── Piano allenamento ────────────────────────────────────────────────────────
+const csvQuests = [
+  {date:"2026-04-23",subject:"Camminata 4 km",      description:"Facile + mobilità schiena"},
+  {date:"2026-04-24",subject:"Forza + 3 km",         description:"Allenamento forza + camminata leggera"},
+  {date:"2026-04-25",subject:"Camminata 6 km",       description:"Ritmo facile, pause regolari"},
+  {date:"2026-04-26",subject:"Camminata 8 km",       description:"Lento e regolare"},
+  {date:"2026-04-27",subject:"Camminata 10 km",      description:"Medio, ritmo facile"},
+  {date:"2026-04-28",subject:"Riposo",               description:"Recupero totale"},
+  {date:"2026-04-29",subject:"Forza + 3 km",         description:"Smonto: forza + camminata leggera"},
+  {date:"2026-04-30",subject:"Lungo 12 km",          description:"Con pause e alimentazione"},
+  {date:"2026-05-01",subject:"Camminata 4 km",       description:"Easy o forza"},
+  {date:"2026-05-02",subject:"Camminata 5 km",       description:"Ritmo facile"},
+  {date:"2026-05-03",subject:"Lungo 13 km",          description:"Progressivo"},
+  {date:"2026-05-04",subject:"Lungo 14 km",          description:"Costante"},
+  {date:"2026-05-05",subject:"Forza + 3 km",         description:"Mattina lavoro"},
+  {date:"2026-05-06",subject:"Camminata 5 km",       description:"Facile"},
+  {date:"2026-05-07",subject:"Camminata 11 km",      description:"Medio"},
+  {date:"2026-05-08",subject:"Riposo",               description:"Recupero"},
+  {date:"2026-05-09",subject:"Forza + 3 km",         description:"Smonto"},
+  {date:"2026-05-10",subject:"Lungo 15 km",          description:"Obiettivo settimana"}
 ];
-const phasePlan=[
-{label:"Fase 1 — Adattamento",start:"2026-04-22",end:"2026-05-31",w:{presence:.45,consistency:.25,effort:.2,distance:.1}},
-{label:"Fase 2 — Costruzione",start:"2026-06-01",end:"2026-06-30",w:{presence:.35,consistency:.25,effort:.2,distance:.2}},
-{label:"Fase 3 — Montagna",start:"2026-07-01",end:"2026-07-31",w:{presence:.25,consistency:.2,effort:.25,distance:.3}},
-{label:"Fase 4 — Rifinitura",start:"2026-08-01",end:"2026-08-31",w:{presence:.35,consistency:.25,effort:.2,distance:.2}}
+
+const phasePlan = [
+  {label:"Fase 1 — Adattamento", start:"2026-04-22",end:"2026-05-31",
+   w:{presence:.45,consistency:.25,effort:.2,distance:.1}},
+  {label:"Fase 2 — Costruzione", start:"2026-06-01",end:"2026-06-30",
+   w:{presence:.35,consistency:.25,effort:.2,distance:.2}},
+  {label:"Fase 3 — Montagna",    start:"2026-07-01",end:"2026-07-31",
+   w:{presence:.25,consistency:.2, effort:.25,distance:.3}},
+  {label:"Fase 4 — Rifinitura",  start:"2026-08-01",end:"2026-08-31",
+   w:{presence:.35,consistency:.25,effort:.2,distance:.2}}
 ];
-const stageNodes=[[88,474],[160,430],[222,338],[308,264],[418,214],[522,282],[638,270],[742,180],[832,154],[932,220],[1032,218],[1098,156],[1152,88]];
-const stageKm=[0,35,55,80,120,190,280,390,500,600,690,745,780];
-const state={user:null,xp:0,level:1,xpTarget:120,streak:0,stamps:0,caminoKm:0};
-function todayISO(){return new Date().toISOString().slice(0,10)}
-function toRoman(n){const v=[1000,900,500,400,100,90,50,40,10,9,5,4,1];const s=["M","CM","D","CD","C","XC","L","XL","X","IX","V","IV","I"];let r="";v.forEach((val,i)=>{while(n>=val){r+=s[i];n-=val;}});return r}
-function getPhase(date){return phasePlan.find(p=>date>=p.start&&date<=p.end)||phasePlan[0]}
-function getQuest(date){return csvQuests.find(q=>q.date===date)||{subject:"Allenamento libero",description:"Segui il piano della fase attuale"}}
-function interpolatePos(km){const v=Math.max(0,Math.min(km,780));for(let i=0;i<stageKm.length-1;i++){const a=stageKm[i],b=stageKm[i+1];if(v>=a&&v<=b){const t=(v-a)/(b-a||1);const[x1,y1]=stageNodes[i],[x2,y2]=stageNodes[i+1];return[x1+(x2-x1)*t,y1+(y2-y1)*t]}}return stageNodes[stageNodes.length-1]}
-function updateDonePath(){const pts=[];for(let i=0;i<stageKm.length;i++){if(stageKm[i]<=state.caminoKm)pts.push(stageNodes[i].join(","))}const last=interpolatePos(state.caminoKm);pts.push(last.join(","));$("#donePath").setAttribute("points",pts.join(" "))}
-function updateHero(){const pct=Math.min(100,(state.xp/state.xpTarget)*100);$("#levelValue").textContent=state.level;$("#ringLevel").textContent=toRoman(state.level);$("#ringFill").style.strokeDashoffset=339.3-(339.3*pct/100);$("#xpFill").style.width=pct+"%";$("#xpText").textContent=`${state.xp}/${state.xpTarget} XP`;$("#streakValue").textContent=state.streak;$("#stampValue").textContent=`${state.stamps}/16`;$("#caminoValue").textContent=`${Math.round(state.caminoKm)}/780`;const[x,y]=interpolatePos(state.caminoKm);$("#playerMarker").setAttribute("transform",`translate(${x} ${y})`);updateDonePath();document.querySelectorAll(".stage-dot").forEach((dot,i)=>{dot.setAttribute("opacity",stageKm[i]<=state.caminoKm?"1":".3")});if(state.caminoKm>=780){$("#compostelaOverlay").style.display="flex"}}
-function setQuest(){const q=getQuest(todayISO());const p=getPhase(todayISO());$("#todayQuest").textContent=q.subject;$("#todayDesc").textContent=`${p.label} — ${q.description}`;$("#data").value=todayISO()}
-function prependTimeline({title,meta,text}){const empty=$("#emptyLog");if(empty)empty.remove();const div=document.createElement("div");div.className="timeline-item";div.innerHTML=`<div class="bullet"></div><div><strong>${title}</strong><span>${meta}</span><p>${text}</p></div>`;$("#timeline").prepend(div)}
-function computeReward({tipo,km,diff,aderenza}){const p=getPhase(todayISO());const w=p.w;const presence=25;const consistency=Math.min(30,10+state.streak*2.5);const effortBase=(Number(diff)-1)*8+(tipo==="lungo"?10:0)+(tipo==="salita"?12:0)+(tipo==="forza"?8:0);const distanceBase=Math.min(30,Number(km||0)*2.2);const planBonus=Number(aderenza)*8;const xp=Math.round(presence*w.presence+consistency*w.consistency+(effortBase+planBonus)*w.effort+distanceBase*w.distance+18);const caminoGain=Math.max(1.5,xp*0.22+Number(km||0)*0.35);return{xp,caminoGain}}
-function maybeLevelUp(){while(state.xp>=state.xpTarget){state.xp-=state.xpTarget;state.level+=1;state.xpTarget=Math.round(state.xpTarget*1.18);state.stamps+=1;prependTimeline({title:`⭐ Livello ${toRoman(state.level)} raggiunto!`,meta:"Ricompensa progressione",text:"Hai guadagnato un timbro bonus. La costanza sta diventando forza reale."})}}
-function checkStampRewards(tipo){if(tipo==="lungo")prependTimeline({title:"🏅 Timbro del Lungo",meta:todayISO(),text:"Hai completato un lungo. La resistenza cresce."});if(tipo==="salita")prependTimeline({title:"⛰️ Timbro della Salita",meta:todayISO(),text:"Hai affrontato il dislivello. Le gambe ringraziano domani."});if(tipo==="forza")prependTimeline({title:"💪 Timbro della Forza",meta:todayISO(),text:"Sessione di forza completata. Il corpo si prepara."});if(state.streak>0&&state.streak%7===0)prependTimeline({title:`🔥 ${state.streak} giorni consecutivi!`,meta:todayISO(),text:"Una settimana intera. La costanza è la vera arma del pellegrino."})}
-async function loadProgress(){if(!state.user)return;const{data,error}=await supabase.from("progress").select("*").eq("user_id",state.user.id).maybeSingle();if(error){console.error(error);return}if(data){state.xp=data.xp;state.level=data.level;state.xpTarget=data.xp_target;state.streak=data.streak;state.stamps=data.stamps;state.caminoKm=Number(data.camino_km||0)}else{await supabase.from("progress").insert({user_id:state.user.id,xp:0,level:1,xp_target:120,streak:0,stamps:0,camino_km:0,phase:1})}}
-async function loadWorkouts(){if(!state.user)return;const{data,error}=await supabase.from("workouts").select("*").eq("user_id",state.user.id).order("date",{ascending:false}).limit(20);if(error){console.error(error);return}if(data&&data.length>0){$("#emptyLog")?.remove();data.forEach(w=>{prependTimeline({title:`${w.type.charAt(0).toUpperCase()+w.type.slice(1)} • +${w.km} km`,meta:`${w.date} • ${w.minutes} min • diff ${w.difficulty}/5`,text:w.notes||"Allenamento registrato."})})}}
-async function saveProgress(){if(!state.user)return;await supabase.from("progress").upsert({user_id:state.user.id,xp:state.xp,level:state.level,xp_target:state.xpTarget,streak:state.streak,stamps:state.stamps,camino_km:state.caminoKm,phase:1,updated_at:new Date().toISOString()})}
-async function saveWorkout({tipo,km,tempo,diff,aderenza,note,date}){if(!state.user)return;await supabase.from("workouts").insert({user_id:state.user.id,date,type:tipo,km:Number(km),minutes:Number(tempo),difficulty:Number(diff),adherence:Number(aderenza),notes:note||null})}
-async function handleSubmit(e){e.preventDefault();if(!state.user){alert("Accedi prima con il magic link.");return}const tipo=$("#tipo").value;const km=parseFloat($("#km").value||0);const tempo=parseInt($("#tempo").value||0);const diff=$("#difficolta").value;const aderenza=$("#aderenza").value;const note=$("#note").value.trim();const date=$("#data").value||todayISO();const{xp,caminoGain}=computeReward({tipo,km,diff,aderenza});state.xp+=xp;state.caminoKm+=caminoGain;state.streak+=1;if(["lungo","salita","forza"].includes(tipo))state.stamps+=1;maybeLevelUp();checkStampRewards(tipo);updateHero();prependTimeline({title:`${tipo.charAt(0).toUpperCase()+tipo.slice(1)} completato • +${xp} XP`,meta:`${date} • ${km} km • ${tempo} min`,text:note||`Avanzamento Camino: +${caminoGain.toFixed(1)} km virtuali. ${getPhase(date).label}.`});const msg=$("#formMsg");msg.textContent=`+${xp} XP guadagnati! Camino avanzato di ${caminoGain.toFixed(1)} km.`;setTimeout(()=>msg.textContent="",4000);await saveWorkout({tipo,km,tempo,diff,aderenza,note,date});await saveProgress();e.target.reset();$("#km").value=4;$("#tempo").value=45;$("#difficolta").value=2;$("#aderenza").value=2;$("#data").value=todayISO()}
-function setAuthUI(user){if(user){$("#authForm").style.display="none";$("#authStatus").style.display="flex";$("#authUserLabel").textContent=`Ciao ${user.email}`}else{$("#authForm").style.display="flex";$("#authStatus").style.display="none"}}
-$("#authForm").addEventListener("submit",async e=>{e.preventDefault();const email=$("#authEmail").value.trim();if(!email)return;const{error}=await supabase.auth.signInWithOtp({email,options:{emailRedirectTo:"https://cesta73.github.io/Cammino/"}});if(error)alert("Errore: "+error.message);else alert("Link inviato! Controlla la tua email.")});
-$("#logoutBtn").addEventListener("click",async()=>{await supabase.auth.signOut()});
-$("#scrollToForm").addEventListener("click",()=>{$("#logAllenamento").scrollIntoView({behavior:"smooth"})});
-$("#trainingForm").addEventListener("submit",handleSubmit);
-supabase.auth.onAuthStateChange(async(event,session)=>{state.user=session?.user??null;setAuthUI(state.user);if(state.user){await loadProgress();await loadWorkouts();updateHero()}});
+
+// ── Coordinate mappa ─────────────────────────────────────────────────────────
+const stageNodes = [
+  [88,474],[160,430],[222,338],[308,264],[418,214],
+  [522,282],[638,270],[742,180],[832,154],[932,220],
+  [1032,218],[1098,156],[1152,88]
+];
+const stageKm = [0,35,55,80,120,190,280,390,500,600,690,745,780];
+
+// ── Stato ────────────────────────────────────────────────────────────────────
+const state = {user:null,xp:0,level:1,xpTarget:120,streak:0,stamps:0,caminoKm:0};
+
+// ── Utility ──────────────────────────────────────────────────────────────────
+function todayISO(){ return new Date().toISOString().slice(0,10) }
+
+function toRoman(n){
+  const v=[1000,900,500,400,100,90,50,40,10,9,5,4,1];
+  const s=["M","CM","D","CD","C","XC","L","XL","X","IX","V","IV","I"];
+  let r="";
+  v.forEach((val,i)=>{while(n>=val){r+=s[i];n-=val;}});
+  return r;
+}
+
+function getPhase(date){
+  return phasePlan.find(p=>date>=p.start&&date<=p.end)||phasePlan[0];
+}
+
+function getQuest(date){
+  return csvQuests.find(q=>q.date===date)||
+         {subject:"Allenamento libero",description:"Segui il piano della fase attuale"};
+}
+
+function interpolatePos(km){
+  const v=Math.max(0,Math.min(km,780));
+  for(let i=0;i<stageKm.length-1;i++){
+    const a=stageKm[i],b=stageKm[i+1];
+    if(v>=a&&v<=b){
+      const t=(v-a)/(b-a||1);
+      const[x1,y1]=stageNodes[i],[x2,y2]=stageNodes[i+1];
+      return[x1+(x2-x1)*t,y1+(y2-y1)*t];
+    }
+  }
+  return stageNodes[stageNodes.length-1];
+}
+
+// ── Aggiorna UI ───────────────────────────────────────────────────────────────
+function updateDonePath(){
+  const pts=[];
+  for(let i=0;i<stageKm.length;i++){
+    if(stageKm[i]<=state.caminoKm) pts.push(stageNodes[i].join(","));
+  }
+  const last=interpolatePos(state.caminoKm);
+  pts.push(last.join(","));
+  $("#donePath").setAttribute("points",pts.join(" "));
+}
+
+function updateHero(){
+  const pct=Math.min(100,(state.xp/state.xpTarget)*100);
+  $("#levelValue").textContent   = state.level;
+  $("#ringLevel").textContent    = toRoman(state.level);
+  $("#ringFill").style.strokeDashoffset = 339.3-(339.3*pct/100);
+  $("#xpFill").style.width       = pct+"%";
+  $("#xpText").textContent       = `${state.xp}/${state.xpTarget} XP`;
+  $("#streakValue").textContent  = state.streak;
+  $("#stampValue").textContent   = `${state.stamps}/16`;
+  $("#caminoValue").textContent  = `${Math.round(state.caminoKm)}/780`;
+
+  const[x,y]=interpolatePos(state.caminoKm);
+  $("#playerMarker").setAttribute("transform",`translate(${x} ${y})`);
+  updateDonePath();
+
+  document.querySelectorAll(".stage-dot").forEach((dot,i)=>{
+    dot.setAttribute("opacity", stageKm[i]<=state.caminoKm ? "1" : ".3");
+  });
+
+  if(state.caminoKm>=780){
+    $("#compostelaOverlay").style.display="flex";
+  }
+}
+
+function setQuest(){
+  const q=getQuest(todayISO());
+  const p=getPhase(todayISO());
+  $("#todayQuest").textContent = q.subject;
+  $("#todayDesc").textContent  = `${p.label} — ${q.description}`;
+  $("#data").value             = todayISO();
+}
+
+// ── Timeline ─────────────────────────────────────────────────────────────────
+function prependTimeline({title,meta,text}){
+  // Rimuove il messaggio "vuoto" se presente
+  const empty=$("#emptyLog");
+  if(empty) empty.remove();
+
+  const div=document.createElement("div");
+  div.className="timeline-item";
+  div.innerHTML=`
+    <div class="bullet"></div>
+    <div>
+      <strong>${title}</strong>
+      <span>${meta}</span>
+      <p>${text}</p>
+    </div>`;
+  $("#timeline").prepend(div);
+}
+
+// ── Calcolo XP ────────────────────────────────────────────────────────────────
+function computeReward({tipo,km,diff,aderenza}){
+  const p=getPhase(todayISO());
+  const w=p.w;
+  const presence   = 25;
+  const consistency= Math.min(30, 10+state.streak*2.5);
+  const effortBase = (Number(diff)-1)*8
+                   + (tipo==="lungo"  ? 10 : 0)
+                   + (tipo==="salita" ? 12 : 0)
+                   + (tipo==="forza"  ?  8 : 0);
+  const distanceBase = Math.min(30, Number(km||0)*2.2);
+  const planBonus    = Number(aderenza)*8;
+  const xp = Math.round(
+    presence*w.presence +
+    consistency*w.consistency +
+    (effortBase+planBonus)*w.effort +
+    distanceBase*w.distance +
+    18
+  );
+  const caminoGain = Math.max(1.5, xp*0.22 + Number(km||0)*0.35);
+  return {xp, caminoGain};
+}
+
+function maybeLevelUp(){
+  while(state.xp>=state.xpTarget){
+    state.xp       -= state.xpTarget;
+    state.level    += 1;
+    state.xpTarget  = Math.round(state.xpTarget*1.18);
+    state.stamps   += 1;
+    prependTimeline({
+      title:`⭐ Livello ${toRoman(state.level)} raggiunto!`,
+      meta:"Ricompensa progressione",
+      text:"Hai guadagnato un timbro bonus. La costanza sta diventando forza reale."
+    });
+  }
+}
+
+function checkStampRewards(tipo){
+  if(tipo==="lungo")
+    prependTimeline({title:"🏅 Timbro del Lungo",meta:todayISO(),
+      text:"Hai completato un lungo. La resistenza cresce."});
+  if(tipo==="salita")
+    prependTimeline({title:"⛰️ Timbro della Salita",meta:todayISO(),
+      text:"Hai affrontato il dislivello. Le gambe ringraziano domani."});
+  if(tipo==="forza")
+    prependTimeline({title:"💪 Timbro della Forza",meta:todayISO(),
+      text:"Sessione di forza completata. Il corpo si prepara."});
+  if(state.streak>0 && state.streak%7===0)
+    prependTimeline({title:`🔥 ${state.streak} giorni consecutivi!`,meta:todayISO(),
+      text:"Una settimana intera. La costanza è la vera arma del pellegrino."});
+}
+
+// ── Supabase: carica dati ─────────────────────────────────────────────────────
+async function loadProgress(){
+  if(!state.user) return;
+  const{data,error}=await supabase.from("progress")
+    .select("*").eq("user_id",state.user.id).maybeSingle();
+  if(error){ console.error("loadProgress:",error); return; }
+  if(data){
+    state.xp       = data.xp;
+    state.level    = data.level;
+    state.xpTarget = data.xp_target;
+    state.streak   = data.streak;
+    state.stamps   = data.stamps;
+    state.caminoKm = Number(data.camino_km||0);
+  } else {
+    await supabase.from("progress").insert({
+      user_id:state.user.id,
+      xp:0,level:1,xp_target:120,streak:0,stamps:0,camino_km:0,phase:1
+    });
+  }
+}
+
+async function loadWorkouts(){
+  if(!state.user) return;
+  const{data,error}=await supabase.from("workouts")
+    .select("*").eq("user_id",state.user.id)
+    .order("date",{ascending:false}).limit(20);
+  if(error){ console.error("loadWorkouts:",error); return; }
+  if(data && data.length>0){
+    $("#emptyLog")?.remove();
+    // Mostra dal più vecchio al più recente (prepend inverte l'ordine)
+    [...data].reverse().forEach(w=>{
+      prependTimeline({
+        title:`${w.type.charAt(0).toUpperCase()+w.type.slice(1)} • +${w.km} km`,
+        meta:`${w.date} • ${w.minutes} min • diff ${w.difficulty}/5`,
+        text: w.notes || "Allenamento registrato."
+      });
+    });
+  }
+}
+
+// ── Supabase: salva dati ──────────────────────────────────────────────────────
+async function saveProgress(){
+  if(!state.user) return;
+  await supabase.from("progress").upsert({
+    user_id:   state.user.id,
+    xp:        state.xp,
+    level:     state.level,
+    xp_target: state.xpTarget,
+    streak:    state.streak,
+    stamps:    state.stamps,
+    camino_km: state.caminoKm,
+    phase:     1,
+    updated_at:new Date().toISOString()
+  });
+}
+
+async function saveWorkout({tipo,km,tempo,diff,aderenza,note,date}){
+  if(!state.user) return;
+  await supabase.from("workouts").insert({
+    user_id:   state.user.id,
+    date,
+    type:      tipo,
+    km:        Number(km),
+    minutes:   Number(tempo),
+    difficulty:Number(diff),
+    adherence: Number(aderenza),
+    notes:     note||null
+  });
+}
+
+// ── Submit form ───────────────────────────────────────────────────────────────
+async function handleSubmit(e){
+  e.preventDefault();
+  if(!state.user){ alert("Accedi prima con il magic link."); return; }
+
+  const tipo    = $("#tipo").value;
+  const km      = parseFloat($("#km").value||0);
+  const tempo   = parseInt($("#tempo").value||0);
+  const diff    = $("#difficolta").value;
+  const aderenza= $("#aderenza").value;
+  const note    = $("#note").value.trim();
+  const date    = $("#data").value || todayISO();
+
+  const{xp,caminoGain}=computeReward({tipo,km,diff,aderenza});
+  state.xp       += xp;
+  state.caminoKm += caminoGain;
+  state.streak   += 1;
+  if(["lungo","salita","forza"].includes(tipo)) state.stamps += 1;
+
+  maybeLevelUp();
+  checkStampRewards(tipo);
+  updateHero();
+
+  prependTimeline({
+    title:`${tipo.charAt(0).toUpperCase()+tipo.slice(1)} completato • +${xp} XP`,
+    meta:`${date} • ${km} km • ${tempo} min`,
+    text: note || `Avanzamento Camino: +${caminoGain.toFixed(1)} km virtuali. ${getPhase(date).label}.`
+  });
+
+  const msg=$("#formMsg");
+  msg.textContent=`+${xp} XP guadagnati! Camino avanzato di ${caminoGain.toFixed(1)} km.`;
+  setTimeout(()=>msg.textContent="",4000);
+
+  await saveWorkout({tipo,km,tempo,diff,aderenza,note,date});
+  await saveProgress();
+
+  // Reset form
+  e.target.reset();
+  $("#km").value       = 4;
+  $("#tempo").value    = 45;
+  $("#difficolta").value = 2;
+  $("#aderenza").value = 2;
+  $("#data").value     = todayISO();
+}
+
+// ── Auth UI ───────────────────────────────────────────────────────────────────
+function setAuthUI(user){
+  if(user){
+    $("#authForm").style.display  ="none";
+    $("#authStatus").style.display="flex";
+    $("#authUserLabel").textContent=`Ciao ${user.email}`;
+  } else {
+    $("#authForm").style.display  ="flex";
+    $("#authStatus").style.display="none";
+  }
+}
+
+// ── Event listeners ───────────────────────────────────────────────────────────
+$("#authForm").addEventListener("submit", async e=>{
+  e.preventDefault();
+  const email=$("#authEmail").value.trim();
+  if(!email) return;
+  const{error}=await supabase.auth.signInWithOtp({
+    email,
+    options:{emailRedirectTo:"https://cesta73.github.io/Cammino/"}
+  });
+  if(error) alert("Errore: "+error.message);
+  else      alert("Link inviato! Controlla la tua email.");
+});
+
+$("#logoutBtn").addEventListener("click", async()=>{
+  await supabase.auth.signOut();
+});
+
+$("#scrollToForm").addEventListener("click",()=>{
+  $("#logAllenamento").scrollIntoView({behavior:"smooth"});
+});
+
+$("#trainingForm").addEventListener("submit", handleSubmit);
+
+// ── Auth state change ─────────────────────────────────────────────────────────
+supabase.auth.onAuthStateChange(async(event,session)=>{
+  state.user=session?.user??null;
+  setAuthUI(state.user);
+  if(state.user){
+    await loadProgress();
+    await loadWorkouts();
+    updateHero();
+  }
+});
+
+// ── Init ──────────────────────────────────────────────────────────────────────
 setQuest();
-(async()=>{const{data}=await supabase.auth.getSession();state.user=data.session?.user??null;setAuthUI(state.user);if(state.user){await loadProgress();await loadWorkouts()}updateHero()})();
+(async()=>{
+  const{data}=await supabase.auth.getSession();
+  state.user=data.session?.user??null;
+  setAuthUI(state.user);
+  if(state.user){
+    await loadProgress();
+    await loadWorkouts();
+  }
+  updateHero();
+})();
 </script>
 </body>
 </html>
