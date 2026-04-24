@@ -126,7 +126,47 @@ body{background:var(--bg);color:var(--text);font-family:'Crimson Text',Georgia,s
     <div class="section-title">Il tuo cammino — Camino Francés</div>
     <div class="map-card">
       <div class="map-svg-wrap">
-        <svg id="mapSvg" viewBox="0 0 1200 540" preserveAspectRatio="xMidYMid meet" style="width:100%;height:auto"></svg>
+        <svg id="mapSvg" viewBox="0 0 1200 540" style="width:100%;height:auto">
+<defs><filter id="glow"><feGaussianBlur stdDeviation="3"/></filter></defs>
+<rect width="1200" height="540" fill="#080c14"/>
+<polyline id="routePath" points="88,474 160,430 222,338 308,264 418,214 522,282 638,270 742,180 832,154 932,220 1032,218 1098,156 1152,88" fill="none" stroke="rgba(226,182,91,.2)" stroke-width="3" stroke-dasharray="8,6"/>
+<polyline id="donePath" points="88,474" fill="none" stroke="#e2b65b" stroke-width="3.5"/>
+<g id="stageNodes">
+ircle class="stage-dot" cx="88" cy="474" r="7" fill="#e2b65b" opacity=".9"/>
+ircle class="stage-dot" cx="160" cy="430" r="6" fill="#e2b65b" opacity=".4"/>
+ircle class="stage-dot" cx="222" cy="338" r="6" fill="#e2b65b" opacity=".4"/>
+ircle class="stage-dot" cx="308" cy="264" r="6" fill="#e2b65b" opacity=".4"/>
+ircle class="stage-dot" cx="418" cy="214" r="6" fill="#e2b65b" opacity=".4"/>
+ircle class="stage-dot" cx="522" cy="282" r="6" fill="#e2b65b" opacity=".4"/>
+ircle class="stage-dot" cx="638" cy="270" r="6" fill="#e2b65b" opacity=".4"/>
+ircle class="stage-dot" cx="742" cy="180" r="6" fill="#e2b65b" opacity=".4"/>
+ircle class="stage-dot" cx="832" cy="154" r="6" fill="#e2b65b" opacity=".4"/>
+ircle class="stage-dot" cx="932" cy="220" r="6" fill="#e2b65b" opacity=".4"/>
+ircle class="stage-dot" cx="1032" cy="218" r="6" fill="#e2b65b" opacity=".4"/>
+ircle class="stage-dot" cx="1098" cy="156" r="6" fill="#e2b65b" opacity=".4"/>
+ircle class="stage-dot" cx="1152" cy="88" r="9" fill="#e2b65b" opacity=".9" filter="url(#glow)"/>
+</g>
+<g font-family="'Cinzel',serif" font-size="13" fill="#b6b09f">
+<text x="70" y="495">St-Jean</text>
+<text x="140" y="450">Pamplona</text>
+<text x="200" y="358">Logroño</text>
+<text x="288" y="284">Burgos</text>
+<text x="398" y="234">León</text>
+<text x="500" y="302">Ponferrada</text>
+<text x="616" y="290">Sarria</text>
+<text x="722" y="200">Lugo</text>
+<text x="810" y="174">Portomarín</text>
+<text x="910" y="240">Palas</text>
+<text x="1010" y="238">Arzúa</text>
+<text x="1076" y="176">Pedrouzo</text>
+<text x="1125" y="78" fill="#e2b65b" font-size="14" font-weight="700">Santiago ✦</text>
+</g>
+<g id="playerMarker" transform="translate(88 474)">
+ircle r="12" fill="#e2b65b" opacity=".25"/>
+ircle r="6" fill="#e2b65b"/>
+<text y="-16" text-anchor="middle" font-size="14">🚶</text>
+</g>
+</svg>
           <defs>
             <filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
           </defs>
