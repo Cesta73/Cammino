@@ -1,34 +1,95 @@
+// ── Storage ───────────────────────────────────────────────────────────────────
 let workouts = JSON.parse(localStorage.getItem("workouts")) || [];
-let points = JSON.parse(localStorage.getItem("points")) || 0;
+let points   = Number(localStorage.getItem("points"))       || 0;
+//             ^^^^^^ forza sempre numero, mai stringa
 
-const list = document.getElementById("list");
+// ── DOM refs ──────────────────────────────────────────────────────────────────
+const list          = document.getElementById("list");
 const pointsDisplay = document.getElementById("points");
+const form          = document.getElementById("form");
+const feedback      = document.getElementById("feedback"); // aggiungi nel HTML
 
+// ── Render ────────────────────────────────────────────────────────────────────
 function render() {
-    list.innerHTML = "";
-    workouts.forEach(w => {
-        let li = document.createElement("li");
-        li.textContent = `${w.km} km - ${w.time} min`;
-        list.appendChild(li);
+  list.innerHTML = "";
+
+  if (workouts.length === 0) {
+    list.innerHTML = "<li>Nessun allenamento registrato.</li>";
+  } else {
+    workouts.forEach((w, index) => {
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <span>${w.date} — ${w.km} km · ${w.time} min</span>
+        <button onclick="removeWorkout(${index})">✕</button>
+      `;
+      list.appendChild(li);
     });
-    pointsDisplay.textContent = points;
+  }
+
+  pointsDisplay.textContent = points;
 }
 
-document.getElementById("form").addEventListener("submit", function(e) {
-    e.preventDefault();
+// ── Aggiungi allenamento ──────────────────────────────────────────────────────
+form.addEventListener("submit", function(e) {
+  e.preventDefault();
 
-    let km = document.getElementById("km").value;
-    let time = document.getElementById("time").value;
+  // Leggi e converti subito a numero
+  const km   = parseFloat(document.getElementById("km").value);
+  const time = parseInt(document.getElementById("time").value);
 
-    workouts.push({ km, time });
+  // Validazione
+  if (isNaN(km) || km <= 0) {
+    showFeedback("Inserisci un valore km valido.", "error");
+    return;
+  }
+  if (isNaN(time) || time <= 0) {
+    showFeedback("Inserisci un tempo valido.", "error");
+    return;
+  }
 
-    // gamification: 10 punti per km
-    points += km * 10;
+  // Data odierna
+  const date = new Date().toLocaleDateString("it-IT");
 
-    localStorage.setItem("workouts", JSON.stringify(workouts));
-    localStorage.setItem("points", JSON.stringify(points));
+  // Aggiungi workout
+  workouts.push({ km, time, date });
 
-    render();
+  // Punti: 10 per km (entrambi numeri certi)
+  const earned = km * 10;
+  points += earned;
+
+  // Salva
+  save();
+  render();
+  form.reset(); // pulisce i campi
+
+  showFeedback(`+${earned} punti guadagnati! 🎉`, "success");
 });
 
+// ── Rimuovi allenamento ───────────────────────────────────────────────────────
+function removeWorkout(index) {
+  // Sottrai i punti del workout rimosso
+  points -= workouts[index].km * 10;
+  if (points < 0) points = 0;
+
+  workouts.splice(index, 1);
+  save();
+  render();
+}
+
+// ── Salva su localStorage ─────────────────────────────────────────────────────
+function save() {
+  localStorage.setItem("workouts", JSON.stringify(workouts));
+  localStorage.setItem("points",   points); // numero puro, no JSON.stringify
+}
+
+// ── Feedback visivo ───────────────────────────────────────────────────────────
+function showFeedback(msg, type) {
+  if (!feedback) return;
+  feedback.textContent    = msg;
+  feedback.style.color    = type === "error" ? "#e74c3c" : "#4caf7d";
+  feedback.style.display  = "block";
+  setTimeout(() => { feedback.style.display = "none"; }, 3000);
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
 render();
