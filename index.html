@@ -623,7 +623,7 @@ async function saveProgress(){
     camino_km: state.caminoKm,
     phase:     1,
     updated_at:new Date().toISOString()
-  });
+  }, { onConflict: "user_id" });  // ← questa riga mancava
 }
 
 async function saveWorkout({tipo,km,tempo,diff,aderenza,note,date}){
