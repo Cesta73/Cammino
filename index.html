@@ -728,14 +728,14 @@ $("#trainingForm").addEventListener("submit", handleSubmit);
 
 // ── Auth state change ─────────────────────────────────────────────────────────
 supabase.auth.onAuthStateChange(async(event,session)=>{
-  state.user=session?.user??null;
-  setAuthUI(state.user);
+  console.log("auth event:", event, session?.user?.email);
   if(state.user){
     await loadProgress();
     await loadWorkouts();
     updateHero();
   }
 });
+
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 setQuest();
