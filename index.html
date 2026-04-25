@@ -739,6 +739,7 @@ supabase.auth.onAuthStateChange(async(event,session)=>{
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 setQuest();
+  console.log("user at init:", state.user);
 (async()=>{
   const{data}=await supabase.auth.getSession();
   state.user=data.session?.user??null;
