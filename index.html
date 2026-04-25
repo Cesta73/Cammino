@@ -655,36 +655,40 @@ async function handleSubmit(e){
   const note    = $("#note").value.trim();
   const date    = $("#data").value || todayISO();
 
-  const{xp,caminoGain}=computeReward({tipo,km,diff,aderenza});
-  state.xp       += xp;
-  state.caminoKm += caminoGain;
-  state.streak   += 1;
-  if(["lungo","salita","forza"].includes(tipo)) state.stamps += 1;
+  try {
+    const{xp,caminoGain}=computeReward({tipo,km,diff,aderenza});
+    state.xp       += xp;
+    state.caminoKm += caminoGain;
+    state.streak   += 1;
+    if(["lungo","salita","forza"].includes(tipo)) state.stamps += 1;
 
-  maybeLevelUp();
-  checkStampRewards(tipo);
-  updateHero();
+    maybeLevelUp();
+    checkStampRewards(tipo);
+    updateHero();
 
-  prependTimeline({
-    title:`${tipo.charAt(0).toUpperCase()+tipo.slice(1)} completato • +${xp} XP`,
-    meta:`${date} • ${km} km • ${tempo} min`,
-    text: note || `Avanzamento Camino: +${caminoGain.toFixed(1)} km virtuali. ${getPhase(date).label}.`
-  });
+    prependTimeline({
+      title:`${tipo.charAt(0).toUpperCase()+tipo.slice(1)} completato • +${xp} XP`,
+      meta:`${date} • ${km} km • ${tempo} min`,
+      text: note || `Avanzamento Camino: +${caminoGain.toFixed(1)} km virtuali. ${getPhase(date).label}.`
+    });
 
-  const msg=$("#formMsg");
-  msg.textContent=`+${xp} XP guadagnati! Camino avanzato di ${caminoGain.toFixed(1)} km.`;
-  setTimeout(()=>msg.textContent="",4000);
+    const msg=$("#formMsg");
+    msg.textContent=`+${xp} XP guadagnati! Camino avanzato di ${caminoGain.toFixed(1)} km.`;
+    setTimeout(()=>msg.textContent="",4000);
 
-  await saveWorkout({tipo,km,tempo,diff,aderenza,note,date});
-  await saveProgress();
+    await saveWorkout({tipo,km,tempo,diff,aderenza,note,date});
+    await saveProgress();
 
-  // Reset form
-  e.target.reset();
-  $("#km").value       = 4;
-  $("#tempo").value    = 45;
-  $("#difficolta").value = 2;
-  $("#aderenza").value = 2;
-  $("#data").value     = todayISO();
+    e.target.reset();
+    $("#km").value       = 4;
+    $("#tempo").value    = 45;
+    $("#difficolta").value = 2;
+    $("#aderenza").value = 2;
+    $("#data").value     = todayISO();
+
+  } catch(err){
+    console.error("handleSubmit error:", err);
+  }
 }
 
 // ── Auth UI ───────────────────────────────────────────────────────────────────
