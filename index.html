@@ -628,7 +628,7 @@ async function saveProgress(){
 
 async function saveWorkout({tipo,km,tempo,diff,aderenza,note,date}){
   if(!state.user) return;
-  await supabase.from("workouts").insert({
+  const {data, error} = await supabase.from("workouts").insert({
     user_id:   state.user.id,
     date,
     type:      tipo,
@@ -638,6 +638,8 @@ async function saveWorkout({tipo,km,tempo,diff,aderenza,note,date}){
     adherence: Number(aderenza),
     notes:     note||null
   });
+  if(error) console.error("saveWorkout error:", error);
+  else console.log("saveWorkout ok:", data);
 }
 
 // ── Submit form ───────────────────────────────────────────────────────────────
