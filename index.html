@@ -709,14 +709,18 @@ $("#trainingForm").addEventListener("submit", handleSubmit);
 // ⚠️ BUG FIX: aggiorna state.user ad ogni cambio sessione
 supabase.auth.onAuthStateChange(async(event,session)=>{
   console.log("auth event:", event, session?.user?.email ?? "no user");
-  state.user = session?.user ?? null;   // ← RIGA MANCANTE nel tuo codice
+  state.user = session?.user ?? null;
   setAuthUI(state.user);
   if(state.user){
-    await loadProgress();
-    await loadWorkouts();
-    updateHero();
+    // ⚠️ setTimeout evita il deadlock sul lock di Supabase
+    setTimeout(async()=>{
+      await loadProgress();
+      await loadWorkouts();
+      updateHero();
+    }, 0);
   }
 });
+
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 setQuest();
